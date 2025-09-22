@@ -1,0 +1,42 @@
+Python ->
+def min_reversals_to_balance(exp):
+    stack = [] 
+    for bracket in exp:
+        if bracket == '{':
+            stack.append(bracket)
+        elif bracket == '}':
+            if stack and stack[-1] == '{':
+                stack.pop()
+            else:
+                stack.append(bracket)
+    unmatched_open = sum(1 for b in stack if b == '{')
+    unmatched_close = sum(1 for b in stack if b == '}')
+    reversals = (unmatched_open + 1) // 2 + (unmatched_close + 1) // 2
+    return reversals
+
+
+c-->
+int minReversalsToBalance(char* exp) {
+    int n = strlen(exp);
+    if (n % 2 != 0) return -1; 
+    char stack[n];
+    int top = -1;
+    for (int i = 0; i < n; i++) {
+        if (exp[i] == '{') {
+            stack[++top] = '{';
+        } else if (exp[i] == '}') {
+            if (top != -1 && stack[top] == '{') {
+                top--;  
+            } else {
+                stack[++top] = '}';  
+            }
+        }
+    }
+    int unmatched_open = 0, unmatched_close = 0;
+    for (int i = 0; i <= top; i++) {
+        if (stack[i] == '{') unmatched_open++;
+        else unmatched_close++;
+    }
+    int reversals = (unmatched_open + 1) / 2 + (unmatched_close + 1) / 2;
+    return reversals;
+}
