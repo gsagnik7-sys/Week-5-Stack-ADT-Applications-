@@ -1,0 +1,28 @@
+Python ->
+class Solution:
+    def nextLargerElement(self, arr):
+        n = len(arr)
+        res = [-1] * n
+        stack = []  
+        for i in range(n):
+            while stack and arr[i] > arr[stack[-1]]:
+                idx = stack.pop()
+                res[idx] = arr[i]
+            stack.append(i)
+        return res
+
+
+c-->
+void nextLargerElement(int arr[], int n, int res[]) {
+    int* stack = (int*)malloc(n * sizeof(int));
+    int top = -1;
+    for (int i = 0; i < n; i++) {
+        while (top != -1 && arr[i] > arr[stack[top]]) {
+            int idx = stack[top--];
+            res[idx] = arr[i];
+        }
+        stack[++top] = i;
+    }
+    while (top != -1) res[stack[top--]] = -1;
+    free(stack);
+}
