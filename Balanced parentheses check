@@ -1,0 +1,46 @@
+Python ->
+def isBalanced(s):
+    stack = []
+    pairs = {')': '(', ']': '[', '}': '{'}
+    for ch in s:
+        if ch in '([{':
+            stack.append(ch)
+        else:
+            if not stack or stack[-1] != pairs[ch]:
+                return "NO"
+            stack.pop()
+    return "YES" if not stack else "NO"
+
+
+
+c -->
+#define MAX 1000
+const char* isBalanced(char* s) {
+    char stack[MAX];
+    int top = -1;
+    for (int i = 0; s[i] != '\0'; i++) {
+        char ch = s[i];
+        if (ch == '(' || ch == '[' || ch == '{') {
+            stack[++top] = ch;
+        } else {
+            if (top == -1) return "NO";
+            char open = stack[top--];
+            if ((ch == ')' && open != '(') ||
+                (ch == ']' && open != '[') ||
+                (ch == '}' && open != '{')) {
+                return "NO";
+            }
+        }
+    }
+    return (top == -1) ? "YES" : "NO";
+}
+int main() {
+    int n;
+    scanf("%d", &n);
+    char s[MAX];
+    for (int i = 0; i < n; i++) {
+        scanf("%s", s);
+        printf("%s\n", isBalanced(s));
+    }
+    return 0;
+}
