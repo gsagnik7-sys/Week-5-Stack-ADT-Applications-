@@ -1,0 +1,44 @@
+Python ->
+class Solution:
+    def celebrity(self, mat):
+        n = len(mat)
+        stack = list(range(n))
+        while len(stack) > 1:
+            a = stack.pop()
+            b = stack.pop()
+            if mat[a][b] == 1:  
+                stack.append(b)
+            else:  
+                stack.append(a)
+        if not stack:
+            return -1
+        cand = stack[0]
+        for i in range(n):
+            if i != cand and (mat[cand][i] == 1 or mat[i][cand] == 0):
+                return -1
+        return cand
+
+
+
+c-->
+int celebrity(int** mat, int n) {
+    int* stack = (int*)malloc(n * sizeof(int));
+    int top = -1;
+    for (int i = 0; i < n; i++) stack[++top] = i;
+    while (top > 0) {
+        int a = stack[top--];
+        int b = stack[top--];
+        if (mat[a][b] == 1) stack[++top] = b; 
+        else stack[++top] = a;                
+    }
+    if (top < 0) return -1;
+    int cand = stack[top];
+    for (int i = 0; i < n; i++) {
+        if (i != cand && (mat[cand][i] == 1 || mat[i][cand] == 0)) {
+            free(stack);
+            return -1;
+        }
+    }  
+    free(stack);
+    return cand;
+}
