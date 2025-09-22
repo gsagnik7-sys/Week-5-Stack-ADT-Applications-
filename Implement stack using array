@@ -1,0 +1,33 @@
+Python ->
+class MyStack:
+    def __init__(self):
+        self.arr=[]
+    def push(self,data):
+        self.arr.append(data)
+    def pop(self):
+        if not self.arr:
+            return -1
+        return self.arr.pop()
+
+
+
+c-->
+#define MAX 101
+struct MyStack {
+    int arr[MAX];
+    int top;
+};
+void initStack(struct MyStack* s) {
+    s->top = -1;
+}
+void push(struct MyStack* s, int x) {
+    if (s->top < MAX - 1) {
+        s->arr[++(s->top)] = x;
+    }
+}
+int pop(struct MyStack* s) {
+    if (s->top == -1) {
+        return -1;
+    }
+    return s->arr[(s->top)--];
+}
