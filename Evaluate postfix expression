@@ -1,0 +1,55 @@
+Python ->
+class Solution:
+    def evaluatePostfix(self, arr):
+        ops = {"+", "-", "*", "/", "^"}
+        stack = []
+        for token in arr:
+            if token not in ops:
+                stack.append(int(token))
+            else:
+                b = stack.pop()
+                a = stack.pop()
+                if token == "+":
+                    stack.append(a + b)
+                elif token == "-":
+                    stack.append(a - b)
+                elif token == "*":
+                    stack.append(a * b)
+                elif token == "/":
+                    # floor division: Python '//' does floor for integers
+                    stack.append(a // b)
+                elif token == "^":
+                    stack.append(pow(a, b))
+        return stack[-1]
+
+
+
+c-->
+int evaluate(char* arr[], int size) {
+    long long stack[1200];
+    int top = -1;
+    for (int i = 0; i < size; i++) {
+        char* token = arr[i];
+        if (strcmp(token, "+") == 0 || strcmp(token, "-") == 0 ||
+            strcmp(token, "*") == 0 || strcmp(token, "/") == 0 ||
+            strcmp(token, "^") == 0) {
+            long long b = stack[top--];
+            long long a = stack[top--];
+            long long res = 0;
+            if (strcmp(token, "+") == 0) res = a + b;
+            else if (strcmp(token, "-") == 0) res = a - b;
+            else if (strcmp(token, "*") == 0) res = a * b;
+            else if (strcmp(token, "/") == 0) {
+                long long q = a / b;
+                if ((a ^ b) < 0 && a % b != 0) q -= 1; // floor division
+                res = q;
+            }
+            else if (strcmp(token, "^") == 0) res = ipow(a, b);
+
+            stack[++top] = res;
+        } else {
+            stack[++top] = atoll(token);
+        }
+    }
+    return (int)stack[top];
+}
