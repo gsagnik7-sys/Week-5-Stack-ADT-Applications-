@@ -1,0 +1,48 @@
+Python ->
+class MyStack:
+    class StackNode:
+        def __init__(self, data):
+            self.data = data
+            self.next = None
+    def __init__(self):
+        self.top = None
+    def push(self, data):
+        new_node = self.StackNode(data)
+        new_node.next = self.top
+        self.top = new_node
+    def pop(self):
+        if self.top is None:
+            return -1
+        popped = self.top.data
+        self.top = self.top.next
+        return popped
+
+
+
+c -->
+struct StackNode {
+    int data;
+    struct StackNode* next;
+};
+struct MyStack {
+    struct StackNode* top;
+};
+void initStack(struct MyStack* s) {
+    s->top = NULL;
+}
+void push(struct MyStack* s, int x) {
+    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
+    newNode->data = x;
+    newNode->next = s->top;
+    s->top = newNode;
+}
+int pop(struct MyStack* s) {
+    if (s->top == NULL) {
+        return -1;
+    }
+    int popped = s->top->data;
+    struct StackNode* temp = s->top;
+    s->top = s->top->next;
+    free(temp);
+    return popped;
+}
