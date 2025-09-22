@@ -1,0 +1,26 @@
+Python ->
+class Solution:
+    def calculateSpan(self, arr):
+        n = len(arr)
+        span = [0] * n
+        stack = []  # stores indices
+        for i in range(n):
+            while stack and arr[stack[-1]] <= arr[i]:
+                stack.pop()
+            span[i] = i + 1 if not stack else i - stack[-1]
+            stack.append(i)
+        return span
+
+
+c-->
+void calculateSpan(int arr[], int n, int span[]) {
+    int* stack = (int*)malloc(n * sizeof(int));
+    int top = -1;
+    for (int i = 0; i < n; i++) {
+        while (top != -1 && arr[stack[top]] <= arr[i])
+            top--;  
+        span[i] = (top == -1) ? (i + 1) : (i - stack[top]);
+        stack[++top] = i;
+    }
+    free(stack);
+}
