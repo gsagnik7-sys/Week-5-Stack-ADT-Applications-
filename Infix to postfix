@@ -1,0 +1,74 @@
+Python ->
+class Solution:
+    def infixtoPostfix(self, s):
+        prec = {'^': 3, '*': 2, '/': 2, '+': 1, '-': 1}
+        right_assoc = {'^': True, '*': False, '/': False, '+': False, '-': False}
+        stack = []
+        output = []  
+        for ch in s:
+            if ch.isalnum():  
+                output.append(ch)
+            elif ch == '(':
+                stack.append(ch)
+            elif ch == ')':
+                while stack and stack[-1] != '(':
+                    output.append(stack.pop())
+                stack.pop()
+            else: 
+                while (stack and stack[-1] != '(' and
+                       (prec[stack[-1]] > prec[ch] or
+                        (prec[stack[-1]] == prec[ch] and not right_assoc[ch]))):
+                    output.append(stack.pop())
+                stack.append(ch)
+        while stack:
+            output.append(stack.pop())
+        return "".join(output)
+
+
+
+ c-->
+#define MAX 6000
+int prec(char op) {
+    if (op == '^') return 3;
+    if (op == '*' || op == '/') return 2;
+    if (op == '+' || op == '-') return 1;
+    return -1;
+}
+int isRightAssoc(char op) {
+    return (op == '^');
+}
+void infixToPostfix(char* s, char* result) {
+    char stack[MAX];
+    int top = -1, k = 0;   
+    for (int i = 0; s[i]; i++) {
+        char ch = s[i];
+        if (isalnum(ch)) {
+            result[k++] = ch;
+        } else if (ch == '(') {
+            stack[++top] = ch;
+        } else if (ch == ')') {
+            while (top != -1 && stack[top] != '(') {
+                result[k++] = stack[top--];
+            }
+            if (top != -1 && stack[top] == '(') top--;
+        } else { 
+            while (top != -1 && stack[top] != '(' &&
+                   (prec(stack[top]) > prec(ch) ||
+                   (prec(stack[top]) == prec(ch) && !isRightAssoc(ch)))) {
+                result[k++] = stack[top--];
+            }
+            stack[++top] = ch;
+        }
+    }
+    while (top != -1) {
+        result[k++] = stack[top--];
+    }
+    result[k] = '\0';
+}
+int main() {
+    char s[MAX], result[MAX];
+    scanf("%s", s);
+    infixToPostfix(s, result);
+    printf("%s\n", result);
+    return 0;
+}
