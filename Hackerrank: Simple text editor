@@ -1,0 +1,87 @@
+Python ->
+class SimpleTextEditor:
+    def __init__(self):
+        self.text = ""
+        self.stack = []  
+    def append(self, s):
+        self.stack.append(self.text)
+        self.text += s
+    def delete(self, k):
+        self.stack.append(self.text)
+        self.text = self.text[:-k]
+    def print_char(self, k):
+        print(self.text[k - 1])
+    def undo(self):
+        if self.stack:
+            self.text = self.stack.pop()
+if __name__ == "__main__":
+    Q = int(input())
+    editor = SimpleTextEditor()
+    for _ in range(Q):
+        command = input().split()
+        op_type = command[0]
+        if op_type == "1":  
+            editor.append(command[1])
+        elif op_type == "2":  
+            editor.delete(int(command[1]))
+        elif op_type == "3":  
+            editor.print_char(int(command[1]))
+        elif op_type == "4": 
+            editor.undo()
+
+
+
+c-->
+#define MAX_LEN 100001  
+#define MAX_OPS 100001  
+char* stack[MAX_OPS];
+int top = -1;
+char text[MAX_LEN];
+void push() {
+    stack[++top] = strdup(text);  
+}
+void append(char* s) {
+    push();
+    strcat(text, s);
+}
+void delete_last(int k) {
+    push();
+    int len = strlen(text);
+    if (k <= len) text[len - k] = '\0';
+    else text[0] = '\0';
+}
+void undo() {
+    if (top >= 0) {
+        strcpy(text, stack[top]);
+        free(stack[top--]);
+    }
+}
+void print_char(int k) {
+    if (k > 0 && k <= strlen(text)) printf("%c\n", text[k - 1]);
+}
+int main() {
+    int Q;
+    scanf("%d", &Q);
+    text[0] = '\0';  
+    for (int i = 0; i < Q; i++) {
+        int op;
+        scanf("%d", &op);
+        if (op == 1) {
+            char s[MAX_LEN];
+            scanf("%s", s);
+            append(s);
+        } else if (op == 2) {
+            int k;
+            scanf("%d", &k);
+            delete_last(k);
+        } else if (op == 3) {
+            int k;
+            scanf("%d", &k);
+            print_char(k);
+        } else if (op == 4) {
+            undo();
+        }
+    }
+    while (top >= 0) free(stack[top--]);
+    return 0;
+}
